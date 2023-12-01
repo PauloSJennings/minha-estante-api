@@ -25,7 +25,7 @@ const cadastrarUsuario = async (req, res) => {
             bio
         }).returning('*');
 
-        return res.status(200).json(novoUsuario[0]);
+        return res.status(201).json(novoUsuario[0]);
 
     } catch (error) {
         console.log(error);

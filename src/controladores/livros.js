@@ -34,6 +34,10 @@ const adicionarLivro = async (req, res) => {
     const { id, status, comentario, nota } = req.body;
     const { id: usuario_id } = req.usuario;
 
+    if ((status === 1) && nota) {
+        return res.status(403).json({ mensagem: 'Nota não pode ser aplicada a livros que você não leu.' });
+    }
+
     try {
 
         const livro = await axios.get(`/volumes/${id}`);
@@ -51,7 +55,7 @@ const adicionarLivro = async (req, res) => {
 
         await knex('livros').insert(novoLivro);
 
-        return res.status(200).json(novoLivro);
+        return res.status(201).json(novoLivro);
 
     } catch (error) {
 
@@ -65,7 +69,21 @@ const adicionarLivro = async (req, res) => {
     }
 }
 
+const listarMeusLivros = async (req, res) => {
+    const { id } = req.usuario;
+
+    try {
+        const livrosDoUsuario = await knex('livros').where('usuario_id', id);
+
+        return res.status(200).json(livrosDoUsuario);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ mensagem: 'Erro interno do servidor.' });
+    }
+}
+
 module.exports = {
     pesquisaLivros,
-    adicionarLivro
+    adicionarLivro,
+    listarMeusLivros
 }

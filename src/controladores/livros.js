@@ -82,8 +82,31 @@ const listarMeusLivros = async (req, res) => {
     }
 }
 
+const deletarLivro = async (req, res) => {
+    const { id } = req.body;
+    const { id: usuario_id } = req.usuario;
+
+    try {
+
+        const livroDeletado = await knex('livros').where({ 'id': id, 'usuario_id': usuario_id }).del().returning('*');
+
+        console.log(livroDeletado);
+
+        if (livroDeletado.length === 0) {
+            return res.status(404).json({ mensagem: 'Livro não encontrado.' });
+        }
+
+        return res.status(204).send();
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ mensagem: 'Erro interno do servidor.' });
+    }
+}
+
 module.exports = {
     pesquisaLivros,
     adicionarLivro,
-    listarMeusLivros
+    listarMeusLivros,
+    deletarLivro
 }

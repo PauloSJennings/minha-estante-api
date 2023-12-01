@@ -24,7 +24,7 @@ const autenticarToken = async (req, res, next) => {
         next();
     } catch (error) {
         console.log(error);
-        return res.status(500).json('Erro interno do servidor');
+        return res.status(500).json({ mensagem: 'Erro interno do servidor' });
     }
 }
 

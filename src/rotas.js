@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { pesquisaLivros } = require('./controladores/livros');
+const { pesquisaLivros, adicionarLivro } = require('./controladores/livros');
 const validarCorpoReq = require('./middleware/validarCorpoReq');
 const schemaUsuario = require('./schemas/schemaUsuario');
 const { cadastrarUsuario, login, detalharUsuario } = require('./controladores/usuarios');
@@ -17,6 +17,9 @@ router.use(autenticarToken);
 
 //rotas usuários
 router.get('/usuario', detalharUsuario);
+
+//rotas livros
+router.get('/livros', adicionarLivro);
 
 
 

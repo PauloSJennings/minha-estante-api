@@ -63,10 +63,19 @@ const login = async (req, res) => {
 }
 
 const detalharUsuario = async (req, res) => {
-    const usuarioLogado = req.usuario;
+    const { id } = req.usuario;
 
     try {
-        return res.status(200).json(usuarioLogado);
+        const dadosUsuario = await knex('usuarios').select('id', 'nome', 'email', 'data_nascimento', 'bio').where('id', id).first();
+
+        const estante = {
+            lidos: Number((await knex('livros').count('*').where('usuario_id', id).andWhere('status', 3))[0]['count']),
+            lendo: Number((await knex('livros').count('*').where('usuario_id', id).andWhere('status', 2))[0]['count']),
+            pretende_ler: Number((await knex('livros').count('*').where('usuario_id', id).andWhere('status', 1))[0]['count']),
+            desistidos: Number((await knex('livros').count('*').where('usuario_id', id).andWhere('status', 4))[0]['count'])
+        }
+
+        return res.status(200).json({ dadosUsuario, estante });
     } catch (error) {
         return res.status(500).json({ mensagem: "Falha interna do servidor!" });
     }

@@ -73,9 +73,12 @@ const listarMeusLivros = async (req, res) => {
     const { id } = req.usuario;
 
     try {
-        const livrosDoUsuario = await knex('livros').where('usuario_id', id).orderBy('id', 'asc');
+        const lidos = await knex('livros').where({ 'usuario_id': id, 'status': 3 }).orderBy('id', 'asc');
+        const lendo = await knex('livros').where({ 'usuario_id': id, 'status': 2 }).orderBy('id', 'asc');
+        const pretendo_ler = await knex('livros').where({ 'usuario_id': id, 'status': 1 }).orderBy('id', 'asc');
+        const desisti = await knex('livros').where({ 'usuario_id': id, 'status': 4 }).orderBy('id', 'asc');
 
-        return res.status(200).json(livrosDoUsuario);
+        return res.status(200).json({ lidos, lendo, pretendo_ler, desisti });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ mensagem: 'Erro interno do servidor.' });

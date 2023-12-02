@@ -35,7 +35,7 @@ const adicionarLivro = async (req, res) => {
     const { id: usuario_id } = req.usuario;
 
     if ((status === 1) && nota) {
-        return res.status(403).json({ mensagem: 'Nota não pode ser aplicada a livros que você não leu.' });
+        return res.status(400).json({ mensagem: 'Nota não pode ser aplicada a livros que você não leu.' });
     }
 
     try {

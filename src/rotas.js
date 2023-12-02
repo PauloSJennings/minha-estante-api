@@ -6,6 +6,7 @@ const { cadastrarUsuario, login, detalharUsuario } = require('./controladores/us
 const autenticarToken = require('./middleware/autenticarToken');
 const schemaLivro = require('./schemas/schemaLivro');
 const schemaEditarLivro = require('./schemas/schemaEditarLivro');
+const schemaDeletarLivro = require('./schemas/schemaDeletarLivro');
 const router = Router();
 
 //rota pesquisa
@@ -23,7 +24,7 @@ router.get('/usuario', detalharUsuario);
 //rotas livros
 router.post('/livros', validarCorpoReq(schemaLivro), adicionarLivro);
 router.get('/livros', listarMeusLivros);
-router.delete('/livros', deletarLivro);
+router.delete('/livros', validarCorpoReq(schemaDeletarLivro), deletarLivro);
 router.put('/livros', validarCorpoReq(schemaEditarLivro), editarLivro);
 
 

@@ -120,7 +120,7 @@ const editarLivro = async (req, res) => {
             nota
         }).where('id', id).returning('*');
 
-        return res.status(200).json(livroAtualizado);
+        return res.status(200).json(livroAtualizado[0]);
 
     } catch (error) {
         console.log(error);

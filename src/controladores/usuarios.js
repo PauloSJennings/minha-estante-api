@@ -44,7 +44,7 @@ const login = async (req, res) => {
             return res.status(400).json({ mensagem: 'Email ou senha incorretos.' });
         }
 
-        const token = jwt.sign({ id: usuarioVerificado.id }, process.env.APIKEY, { expiresIn: '2h' });
+        const token = jwt.sign({ id: usuarioVerificado.id }, process.env.APIKEY, { expiresIn: '1h' });
 
         const usuarioLogado = {
             usuario: {

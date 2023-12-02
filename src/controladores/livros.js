@@ -73,7 +73,7 @@ const listarMeusLivros = async (req, res) => {
     const { id } = req.usuario;
 
     try {
-        const livrosDoUsuario = await knex('livros').where('usuario_id', id);
+        const livrosDoUsuario = await knex('livros').where('usuario_id', id).orderBy('id', 'asc');
 
         return res.status(200).json(livrosDoUsuario);
     } catch (error) {
@@ -90,8 +90,6 @@ const deletarLivro = async (req, res) => {
 
         const livroDeletado = await knex('livros').where({ 'id': id, 'usuario_id': usuario_id }).del().returning('*');
 
-        console.log(livroDeletado);
-
         if (livroDeletado.length === 0) {
             return res.status(404).json({ mensagem: 'Livro não encontrado.' });
         }
@@ -104,9 +102,36 @@ const deletarLivro = async (req, res) => {
     }
 }
 
+const editarLivro = async (req, res) => {
+    const { id, status, comentario, nota } = req.body;
+    const { id: usuario_id } = req.usuario;
+
+    try {
+
+        const livro = await knex('livros').where({ 'id': id, 'usuario_id': usuario_id }).first();
+
+        if (!livro) {
+            return res.status(404).json({ mensagem: 'Livro não encontrado.' });
+        }
+
+        const livroAtualizado = await knex('livros').update({
+            status,
+            comentario,
+            nota
+        }).where('id', id).returning('*');
+
+        return res.status(200).json(livroAtualizado);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ mensagem: 'Erro interno do servidor.' });
+    }
+}
+
 module.exports = {
     pesquisaLivros,
     adicionarLivro,
     listarMeusLivros,
-    deletarLivro
+    deletarLivro,
+    editarLivro
 }

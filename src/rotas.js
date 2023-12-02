@@ -1,9 +1,11 @@
 const { Router } = require('express');
-const { pesquisaLivros, adicionarLivro, listarMeusLivros, deletarLivro } = require('./controladores/livros');
+const { pesquisaLivros, adicionarLivro, listarMeusLivros, deletarLivro, editarLivro } = require('./controladores/livros');
 const validarCorpoReq = require('./middleware/validarCorpoReq');
 const schemaUsuario = require('./schemas/schemaUsuario');
 const { cadastrarUsuario, login, detalharUsuario } = require('./controladores/usuarios');
 const autenticarToken = require('./middleware/autenticarToken');
+const schemaLivro = require('./schemas/schemaLivro');
+const schemaEditarLivro = require('./schemas/schemaEditarLivro');
 const router = Router();
 
 //rota pesquisa
@@ -19,9 +21,10 @@ router.use(autenticarToken);
 router.get('/usuario', detalharUsuario);
 
 //rotas livros
-router.post('/livros', adicionarLivro);
+router.post('/livros', validarCorpoReq(schemaLivro), adicionarLivro);
 router.get('/livros', listarMeusLivros);
 router.delete('/livros', deletarLivro);
+router.put('/livros', validarCorpoReq(schemaEditarLivro), editarLivro);
 
 
 

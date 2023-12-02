@@ -72,9 +72,39 @@ const detalharUsuario = async (req, res) => {
     }
 }
 
+const editarUsuario = async (req, res) => {
+    const { id } = req.usuario;
+    const { nome, email, senha, data_nascimento, bio } = req.body;
+
+    try {
+        if (email) {
+            const emailIndisponivel = await knex('usuarios').whereNot('id', id).andWhere('email', email);
+
+            if (emailIndisponivel) {
+                return res.status(400).json({ mensagem: 'Email indisponível.' })
+            }
+        }
+
+        const usuarioAtualizado = await knex('usuarios').update({
+            nome,
+            email,
+            senha,
+            data_nascimento,
+            bio
+        }).where('id', id).returning(['id', 'nome', 'email', 'data_nascimento', 'bio']);
+
+        return res.status(200).json(usuarioAtualizado[0]);
+
+    } catch (error) {
+        return res.status(500).json({ mensagem: "Falha interna do servidor!" });
+    }
+
+}
+
 module.exports = {
     cadastrarUsuario,
     login,
-    detalharUsuario
+    detalharUsuario,
+    editarUsuario
 }
 

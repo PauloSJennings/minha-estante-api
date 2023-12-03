@@ -1,8 +1,8 @@
 const knex = require('../dbConexao');
-const axios = require('../axiosConfig');
 const { verificarEmail } = require('../utils');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const enviarEmail = require('../nodemailer');
 
 const cadastrarUsuario = async (req, res) => {
     const { nome, email, senha, data_nascimento, bio } = req.body;
@@ -24,6 +24,8 @@ const cadastrarUsuario = async (req, res) => {
             data_nascimento,
             bio
         }).returning('*');
+
+        enviarEmail(email, 'Bem Vindo!', 'Cadastro feito com sucesso!');
 
         return res.status(201).json(novoUsuario[0]);
 

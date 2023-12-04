@@ -1,11 +1,30 @@
 const joi = require('joi').extend(require('@joi/date'));
 
 const schemaEditarUsuario = joi.object({
-    nome: joi.string().max(50),
-    email: joi.string().email(),
-    senha: joi.string().min(5),
-    data_nascimento: joi.date().format('DD/MM/YYYY').min('01/01/1930').max('now'),
-    bio: joi.string().max(200)
+    nome: joi.string().max(50).messages({
+        'string.empty': 'O campo NOME não pode estar vazio.',
+        'string.base': 'O campo NOME deve ser alfabético.',
+        'string.max': 'O campo NOME deve ter no máximo 50 caracteres.'
+    }),
+    email: joi.string().email().messages({
+        'string.email': 'EMAIL inválido.',
+        'string.base': 'EMAIL inválido.',
+        'string.empty': 'O campo EMAIL não pode estar vazio.'
+    }),
+    senha: joi.string().min(5).messages({
+        'string.base': 'O campo SENHA deve ser alfanumérico.',
+        'string.empty': 'O campo SENHA não pode estar vazio.',
+        'string.min': 'A SENHA deve conter pelo menos 5 caracteres.'
+    }),
+    data_nascimento: joi.date().format('DD/MM/YYYY').min('01/01/1930').max('now').messages({
+        'date.format': 'DATA DE NASCIMENTO inválida.',
+        'date.max': 'DATA DE NASCIMENTO inválida.',
+        'date.min': 'DATA DE NASCIMENTO inválida.'
+    }),
+    bio: joi.string().max(200).messages({
+        'string.base': 'O campo BIO deve ser um texto.',
+        'string.max': 'O campo BIO deve ter no máximo 200 caracteres.'
+    })
 });
 
 module.exports = schemaEditarUsuario;

@@ -61,7 +61,7 @@ const adicionarLivro = async (req, res) => {
 
         console.log(error);
 
-        if (error.code === 'ERR_BAD_REQUEST') {
+        if ((error.code === 'ERR_BAD_REQUEST') || (error.code === 'ERR_BAD_RESPONSE')) {
             return res.status(404).json({ mensagem: 'Livro não encontrado.' });
         }
 

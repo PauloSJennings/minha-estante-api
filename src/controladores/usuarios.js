@@ -107,6 +107,7 @@ const editarUsuario = async (req, res) => {
         return res.status(200).json(usuarioAtualizado[0]);
 
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ mensagem: "Falha interna do servidor!" });
     }
 
